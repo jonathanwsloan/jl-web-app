@@ -1,0 +1,81 @@
+<!-- Generate selections to narrow down purpose statement -->
+<script>
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            // Access the current users document
+            var docRef = db.collection("users").doc(user.email);
+            console.log('Found user account');
+
+            //confirm document exists
+            docRef.get().then(async function (doc) {
+                if (doc.exists) {
+                    //Create select (dropdown) element for passions
+                    var passionSelect = document.createElement('select');
+                    passionSelect.id = 'finalPassion';
+                    document.getElementById('finalPassionDiv').appendChild(passionSelect);
+
+                    var poption1 = document.createElement('option');
+                    poption1.value = doc.data().passion1;
+                    poption1.innerHTML = doc.data().passion1;
+                    passionSelect.appendChild(poption1);
+
+                    var poption2 = document.createElement('option');
+                    poption2.value = doc.data().passion2;
+                    poption2.innerHTML = doc.data().passion2;
+                    passionSelect.appendChild(poption2);
+
+                    var poption3 = document.createElement('option');
+                    poption3.value = doc.data().passion3;
+                    poption3.innerHTML = doc.data().passion3;
+                    passionSelect.appendChild(poption3);
+
+                    //Create select (dropdown) element for talents
+                    var talentSelect = document.createElement('select');
+                    talentSelect.id = 'finalTalent';
+                    document.getElementById('finalTalentDiv').appendChild(talentSelect);
+
+                    var toption1 = document.createElement('option');
+                    toption1.value = doc.data().talent1;
+                   toption1.innerHTML = doc.data().talent1;
+                    talentSelect.appendChild(toption1);
+
+                    var toption2 = document.createElement('option');
+                    toption2.value = doc.data().talent2;
+                    toption2.innerHTML = doc.data().talent2;
+                    talentSelect.appendChild(toption2);
+
+                    var toption3 = document.createElement('option');
+                    toption3.value = doc.data().talent3;
+                    toption3.innerHTML = doc.data().talent3;
+                    talentSelect.appendChild(toption3);
+
+                    //Create select (dropdown) element for talents
+                    var experienceSelect = document.createElement('select');
+                    experienceSelect.id = 'finalExperience';
+                    document.getElementById('finalExperienceDiv').appendChild(experienceSelect);
+
+                    var eoption1 = document.createElement('option');
+                    eoption1.value = doc.data().talent1;
+                    eoption1.innerHTML = doc.data().talent1;
+                    talentSelect.appendChild(toption1);
+
+                    var toption2 = document.createElement('option');
+                    toption2.value = doc.data().talent2;
+                    toption2.innerHTML = doc.data().talent2;
+                    talentSelect.appendChild(toption2);
+
+                    var toption3 = document.createElement('option');
+                    toption3.value = doc.data().talent3;
+                    toption3.innerHTML = doc.data().talent3;
+                    talentSelect.appendChild(toption3);
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
+        }
+    });
+</script>

@@ -1,0 +1,40 @@
+<!-- add test data -->
+<script>
+    addData.addEventListener('click', addtestdata);
+    function addtestdata() {
+
+        db.collection('users').add({
+            first: "Newest Ada",
+            last: "Lovelace",
+            born: 1815
+        })
+            .then(function (docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function (error) {
+                console.error("Error adding document: ", error);
+            });
+    }
+</script>
+
+<!-- add test user data -->
+<script>
+    firstName.addEventListener("change", addFirstName);
+    function addFirstname() {
+        var email = signupEmail.value;
+        var password = signupPassword.value;
+
+        // Add a new document in collection "cities"
+        db.collection("users").doc("LA").set({
+            name: "Los Angeles",
+            state: "CA",
+            country: "USA"
+        })
+            .then(function () {
+                console.log("Document successfully written!");
+            })
+            .catch(function (error) {
+                console.error("Error writing document: ", error);
+            });
+    }
+</script>

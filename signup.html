@@ -1,0 +1,60 @@
+<!-- signup function -->
+<script>
+    signupButton.addEventListener('click', signup);
+    function signup() {
+        signupButton.style.display = 'none';
+        signupError.style.display = 'none';
+        var email = signupEmail.value;
+        var password = signupPassword.value;
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(function () {
+                window.location.replace('./menu');
+            })
+            .catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log('Error code: ' + errorCode);
+                console.log('Error message: ' + errorMessage);
+                signupButton.style.display = 'block';
+                signupError.innerText = errorMessage;
+                signupError.style.display = 'block';
+            });
+        // Add a new document in collection "cities"
+        db.collection("users").doc(email).set({
+            email: email,
+            firstName: firstName.value,
+            lastName: lastName.value
+        })
+            .then(function () {
+                console.log("Document successfully written!");
+            })
+            .catch(function (error) {
+                console.error("Error writing document: ", error);
+            });
+    }
+</script>
+
+<!-- safe signup function 
+<script>    
+    signupButton.addEventListener('click', signup);
+    function signup() {
+        signupButton.style.display = 'none';
+        signupError.style.display = 'none';
+        var email = signupEmail.value;
+        var password = signupPassword.value;
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(function () {
+                window.location.replace('./private');
+            })
+            .catch(function (error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log('Error code: ' + errorCode);
+                console.log('Error message: ' + errorMessage);
+                signupButton.style.display = 'block';
+                signupError.innerText = errorMessage;
+                signupError.style.display = 'block';
+            });
+    }
+</script>
+-->

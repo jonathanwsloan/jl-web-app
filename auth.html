@@ -1,0 +1,111 @@
+<!-- auth state function -->
+<script>
+    var privatePages = [
+        '/app',
+        '/app/menu',
+        '/app/d1/d1-page-1',
+        '/app/d1/d1-page-2',
+        '/app/d1/d1-page-3',
+        '/app/d1/d1-page-4',
+        '/app/d1/d1-page-5',
+        '/app/d2/d2-page-1',
+        '/app/d2/d2-page-2',
+        '/app/d2/d2-page-3',
+        '/app/d2/d2-page-4',
+        '/app/d2/d2-page-5',
+        '/app/d2/d2-page-6',
+        '/app/d2/d2-page-7',
+        '/app/d2/d2-page-8',
+        '/app/d2/d2-page-9',
+        '/app/d2/d2-page-10',
+        '/app/profile'
+    ];
+    var publicPages = [
+        '/sign-up'
+    ];
+    firebase.auth().onAuthStateChanged(function (user) {
+        var currentPath = window.location.pathname;
+        if (user) {
+            // User is signed in.
+            if (publicPages.includes(currentPath)) {
+                window.location.replace('/app/menu');
+            } else {
+                console.log('User is logged in!');
+                console.log('Email: ' + user.email);
+                console.log('UID: ' + user.uid);
+            }
+        } else {
+            // User is signed out.
+            if (privatePages.includes(currentPath)) {
+                window.location.replace('/');
+            } else {
+                console.log('No user is logged in');
+            }
+        }
+    });
+</script>
+
+
+
+
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyCaujccHAzNMDaLi0xwMR_2TD7Sz37X1oo",
+        authDomain: "journeylife-test-project.firebaseapp.com",
+        databaseURL: "https://journeylife-test-project.firebaseio.com",
+        projectId: "journeylife-test-project",
+        storageBucket: "journeylife-test-project.appspot.com",
+        messagingSenderId: "950490525087"
+    };
+    firebase.initializeApp(config);
+
+    var db = firebase.firestore();
+</script>
+
+
+<!-- auth state function -->
+<script>
+    var privatePages = [
+        '/app',
+        '/app/menu',
+        '/app/d1/d1-page-1',
+        '/app/d1/d1-page-2',
+        '/app/d1/d1-page-3',
+        '/app/d1/d1-page-4',
+        '/app/d1/d1-page-5',
+        '/app/d2/d2-page-1',
+        '/app/d2/d2-page-2',
+        '/app/d2/d2-page-3',
+        '/app/d2/d2-page-4',
+        '/app/d2/d2-page-5',
+        '/app/d2/d2-page-6',
+        '/app/d2/d2-page-7',
+        '/app/d2/d2-page-8',
+        '/app/d2/d2-page-9',
+        '/app/d2/d2-page-10',
+        '/app/profile'
+    ];
+    var publicPages = [
+        '/sign-up',
+    ];
+    firebase.auth().onAuthStateChanged(function (user) {
+        var currentPath = window.location.pathname;
+        if (user) {
+            //user is signed in
+            console.log('User is logged in!');
+            console.log('Email: ' + user.email);
+            console.log('UID: ' + user.uid);
+        } else {
+            // User is signed out.
+            if (privatePages.includes(currentPath)) {
+                window.location.replace('/');
+            } else {
+                console.log('No user is logged in');
+            }
+        }
+    });
+</script>

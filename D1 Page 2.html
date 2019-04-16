@@ -1,0 +1,36 @@
+<!-- Add identities to user data -->
+<script type="text/javascript">
+    document.getElementById('nextPage').addEventListener('click', updateIdentities)
+
+    function updateIdentities() {
+        //First, check if user is logged in
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.
+                // Access the current users document
+                var docRef = db.collection("users").doc(user.email);
+                console.log('Found user account');
+
+                //confirm document exists
+                docRef.get().then(async function (doc) {
+                    if (doc.exists) {
+                        // Save identities to document
+                        await docRef.update({
+                            identities: [firstIdentity.value, secondIdentity.value, thirdIdentity.value]
+                        })
+                        window.location.replace('/app/d1/d1-page-3');
+                    } else {
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
+                    }
+                }).catch(function (error) {
+                    console.log("Error getting document:", error);
+                });
+
+            } else {
+                // No user is signed in.
+                console.log('No user is signed in');
+            }
+        })
+    }
+</script>

@@ -1,0 +1,31 @@
+<!-- Generate selections to narrow down purpose statement -->
+<script>
+    var user = firebase.auth().currentUser;
+    if (user) {
+        // User is signed in.
+        // Access the current users document
+        var docRef = db.collection("jl data").doc('impact-verbs');
+        console.log('Found impact verbs');
+
+        //confirm document exists
+        docRef.get().then(async function (doc) {
+            if (doc.exists) {
+                //Create select (dropdown) element for each identity(identity-verbs)
+                var count = 0;
+                var acheiverDropdowns = document.getElementById('Achiever').getElementsByClassName('impact-verb-dropdown');
+                Array.from(acheiverDropdowns).forEach(function (dropdown) {
+                    var option = document.createElement('select');
+                    option.id = docRef.data().Achiever[count];
+                    option.innerHTML = docRef.data().Achiever[count];
+                    dropdown.appendChild(option);
+                    count++;
+                })
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+    }
+</script>

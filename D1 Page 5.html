@@ -1,0 +1,49 @@
+<!-- D1 Page 5: End page -->
+
+<!-- Add top Identities and Impact verbs -->
+<script>
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+
+            // Get the current year and put it in a variable
+            var docRef = db.collection("users").doc(user.email);
+            console.log('Found user account');
+
+            docRef.get().then(function (doc) {
+                if (doc.exists) {
+                    //print top identities
+                    var identityList = document.getElementById("identity-list")
+
+                    doc.data().identities.forEach(function (identity) {
+                        var div = document.createElement('div')
+                        div.className = 'list-element';
+                        div.id = identity;
+                        identityList.appendChild(div);
+                        div.innerHTML += identity;
+                    });
+                    //print top impact verbs
+                    var verbList = document.getElementById("impact-verb-list")
+                    var verbs = [doc.data().finalVerbs[1], doc.data().finalVerbs[2], doc.data().finalVerbs[3]]
+                    verbs.forEach(function (verb) {
+                        var div = document.createElement('div')
+                        div.className = 'list-element';
+                        div.id = verb;
+                        verbList.appendChild(div);
+                        div.innerHTML += verb;
+                    });
+
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
+
+        } else {
+            // No user is signed in.
+            console.log('No user is signed in');
+        }
+    })
+</script>

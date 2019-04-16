@@ -1,0 +1,55 @@
+<script>
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            // Get the current year and put it in a variable
+            var docRef = db.collection("users").doc(user.email);
+            docRef.get().then(function (doc) {
+                if (doc.exists) {
+                    //add top verbs to buttons
+                    var impactVerbButtons = document.querySelectorAll('.structure-mywhy-button.impact-verb');
+                    var count = 1;
+
+                    Array.from(impactVerbButtons).forEach(function (button) {
+                        button.innerHTML = doc.data().finalVerbs[count];
+                        count++;
+                    });
+
+                    //add everything else to buttons
+                    var aseButtons = document.querySelectorAll('.structure-mywhy-button.ase');
+                    Array.from(aseButtons).forEach(function (button){
+                        
+                        // button.innerHTML = query;
+                        var field = button.id;
+                        console.log(query.equalTo(field, ));
+                    });
+
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
+        }
+    })
+    document.getElementById('impactVerbSelect').addEventListener('click', replaceImpactVerb)
+
+    function replaceImpactVerb(verb) {
+        if (verb.target !== verb.currentTarget) {
+            var user = firebase.auth().currentUser;
+            var docRef = db.collection("users").doc(user.email);
+            docRef.get().then(function (doc) {
+                if (doc.exists) {
+                    //replace impactverb in statement
+                    impactVerb.textContent = verb.target.textContent;
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
+        }
+    }
+</script>

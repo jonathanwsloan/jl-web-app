@@ -1,0 +1,75 @@
+<!-- Generate sortable list of impact verbs and save upon completion -->
+
+<body>
+    <ul id="sortable">
+        <script type="text/javascript">
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    // Get user document
+                    var docRef = db.collection("users").doc(user.email);
+                    console.log('Found user account');
+                    docRef.get().then(function (doc) {
+                        if (doc.exists) {
+                            //Create sortable elements for each verb
+                            var ul = document.getElementById("sortable")
+                            doc.data().verbs.forEach(function (verb) {
+                                var li = document.createElement('li')
+                                li.className = 'sortable-element';
+                                li.id = verb;
+                                ul.appendChild(li);
+                                li.innerHTML += verb;
+                            });
+                        } else {
+                            // doc.data() will be undefined in this case
+                            console.log("No such document!");
+                        }
+                    }).catch(function (error) {
+                        console.log("Error getting document:", error);
+                    });
+
+                } else {
+                    // No user is signed in.
+                    console.log('No user is signed in');
+                }
+            })
+        </script>
+    </ul>
+
+
+    <script>
+        $(function () {
+            $("#sortable").sortable({
+                update: function (event, ui) {
+                    var tmp = $("#sortable").sortable("toArray");
+                    firebase.auth().onAuthStateChanged(function (user) {
+                        if (user) {
+                            // User is signed in.
+                            // Get user document
+                            var docRef = db.collection("users").doc(user.email);
+                            console.log('Found user account');
+                            docRef.get().then(async function (doc) {
+                                if (doc.exists) {
+                                    //write to database
+                                    await docRef.update({
+                                        finalVerbs: tmp
+                                    })
+                                } else {
+                                    // doc.data() will be undefined in this case
+                                    console.log("No such document!");
+                                }
+                            }).catch(function (error) {
+                                console.log("Error getting document:", error);
+                            });
+
+                        } else {
+                            // No user is signed in.
+                            console.log('No user is signed in');
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+
+</body>

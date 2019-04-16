@@ -1,0 +1,128 @@
+<!-- D1 Page Two: Impact Verbs -->
+
+<!-- Unhide unselected dropdowns from identities -->
+<!-- v1.0.2 -->
+<script>
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+
+            // Get the current year and put it in a variable
+            var docRef = db.collection("users").doc(user.email);
+            console.log('Found user account');
+
+            docRef.get().then(function (doc) {
+                if (doc.exists) {
+                    //Find list of identities
+                    var className = document.getElementsByClassName('identity-verbs');
+                    var classnameCount = className.length;
+                    var identityGroups = new Array();
+                    for (var j = 0; j < classnameCount; j++) {
+                        identityGroups.push(className[j].id);
+                    }
+
+                    // console.log(identityGroups);
+                    //unhide unselected verb groups
+                    doc.data().identities.forEach(function (group) {
+                        if (identityGroups.includes(group)) {
+                            console.log("Found a group to show: " + group);
+                            var toShow = document.getElementById(group);
+                            toShow.style.display = 'block';
+                        }
+                    })
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
+
+            // <!-- Generate selections to narrow down purpose statement -->
+            var jldata = db.collection("jl data").doc("impact-verbs");
+            console.log('Found impact verbs');
+
+            //confirm document exists
+            jldata.get().then(async function (doc) {
+                if (doc.exists) {
+                    //Create select (dropdown) element for each identity(identity-verbs)
+                    var count = 0;
+                    var acheiverDropdowns = document.getElementById('Achiever').getElementsByClassName('impact-verb-dropdown');
+                    console.log(acheiverDropdowns);
+                    Array.from(acheiverDropdowns).forEach(function (dropdown) {
+
+                        var option = document.createElement('select');
+                        option.id = jldata.data().Achiever[count];
+                        option.innerHTML = jldata.data().Achiever[count];
+                        dropdown.appendChild(option);
+                        count++;
+                    })
+
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function (error) {
+                console.log("Error getting document:", error);
+            });
+        } else {
+            // No user is signed in.
+            console.log('No user is signed in');
+        }
+    });
+</script>
+
+
+<!-- Add any selected verbs to list -->
+<!-- Cycle through every dropdown and create an array with any non-null values -->
+<!-- v1.0.2  -->
+<!-- Add identities to user data -->
+<script type="text/javascript">
+    document.getElementById('nextPage').addEventListener('click', addVerbs)
+
+    function addVerbs() {
+        //First, check if user is logged in
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.
+                // Access the current users document
+                var docRef = db.collection("users").doc(user.email);
+                console.log('Found user account');
+
+                //confirm document exists
+                docRef.get().then(async function (doc) {
+                    if (doc.exists) {
+                        //Gather all dropdowns
+                        var dropdowns = document.getElementsByClassName("impact-verb-dropdown w-select");
+
+                        var verbsToSort = new Array();
+
+                        //Find and upload all selected verbs
+                        Array.from(dropdowns).forEach(function (element) {
+                            if (element.value.length > 1) {
+                                var verbToAdd = element.value;
+                                verbsToSort.push(verbToAdd);
+                            }
+                        })
+                        // Save identities to document
+                        await docRef.update({
+                            verbs: verbsToSort
+                        })
+
+                        // console.log("Verbs added to user doc");
+                        window.location.replace('/app/d1/d1-page-4');
+                    } else {
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
+                    }
+                }).catch(function (error) {
+                    console.log("Error getting document:", error);
+                });
+
+            } else {
+                // No user is signed in.
+                console.log('No user is signed in');
+            }
+        })
+    }
+</script>
